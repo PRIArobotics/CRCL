@@ -118,4 +118,4 @@ Convention of the order of the attribute keys has to be
 
 1. `CommandID` : integer - the CommandID of the command which is referenced with this status message
 2. `StatusID` : integer - the unique positive status identifier, incremental
-3. `CommandState` : string - state description enum: `CRCL_Ready`, `CRCL_Working`, `CRCL_Done` and `CRCL_Error`
+3. `CommandState` : string - state description enum: `CRCL_Queued`, `CRCL_Working`, `CRCL_Done` and `CRCL_Error`
