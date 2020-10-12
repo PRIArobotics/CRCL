@@ -93,14 +93,14 @@ Convention of the order of the attribute keys has to be
     "Name" : "Use Tool 7", 
     "CommandID" : 5, 
     "CRCLParam" : {
-        "Setting" : 7
+        "ToolID" : 7
     }
 }
 ```
 
 ### Examples
 
-1. `Setting` : integer - id of tool, for example gripper
+1. `ToolID` : integer - id of the tool, for example gripper id
 
 ## Status response
 
