@@ -14,7 +14,7 @@ Convention of the order of the attribute keys has to be
 
 1. `Pose` : object - target TCP position `X`, (`Y`), (`Z`), (`A`), (`B`), (`C`)
 2. `Straight` : boolean - if true, TCP stays in line between origin and target position, otherwise arbitrary trajectory
-3. `Blend` : float - factor to blend this movement with the next movement
+3. `Blending` : float - blending radius in [mm] to blend this movement with the next movement
 
 ### Examples
 
@@ -83,7 +83,7 @@ Convention of the order of the attribute keys has to be
 
 ### Examples
 
-1. `Setting` : integer - tool, for example gripper, state between 0.0 and 1.0
+1. `Setting` : float - tool, for example gripper, state between 0.0 and 1.0
 
 ## SetEndEffectorParameter
 
@@ -118,4 +118,9 @@ Convention of the order of the attribute keys has to be
 
 1. `CommandID` : integer - the CommandID of the command which is referenced with this status message
 2. `StatusID` : integer - the unique positive status identifier, incremental
-3. `CommandState` : string - state description enum: `CRCL_Queued`, `CRCL_Working`, `CRCL_Done` and `CRCL_Error`
+3. `CommandState` : string - state description enum: 
+    1. `CRCL_Queued` - command sucessfully parsed und put into the queue
+    2. `CRCL_Working` - command started
+    3. `CRCL_Done` - command finished
+    4. `CRCL_Error` - command failed
+4. `StateDescription` : string - description of the state for humans
