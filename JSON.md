@@ -13,8 +13,8 @@ Convention of the order of the attribute keys has to be
 ### CRCLParam:
 
 1. `Pose` : object - target TCP position `X`, (`Y`), (`Z`), (`A`), (`B`), (`C`)
-2. `Straight` : boolean - if true, TCP stays in line between origin and target position, otherwise arbitrary trajectory
-3. `Blending` : float - blending radius in [mm] to blend this movement with the next movement
+2. (`Straight`) : boolean - if true, TCP stays in line between origin and target position, otherwise arbitrary trajectory (default).
+3. (`Blending`) : float - blending radius in [mm] to blend this movement with the next movement, no blending with 0 (default)
 
 ### Examples
 
@@ -39,7 +39,7 @@ Convention of the order of the attribute keys has to be
 
 ```json
 {
-    "CommandID" : 3,
+    "CommandID" : 2,
     "Name" : "Move Festo",
     "CRCLCommand" : "MoveTo",
     "CRCLParam" : { 
@@ -56,7 +56,7 @@ Convention of the order of the attribute keys has to be
 
 ```json
 {
-    "CommandID" : 2,
+    "CommandID" : 3,
     "Name" : "Move Conveyor",
     "CRCLCommand" : "MoveTo",
     "CRCLParam" : { 
@@ -123,4 +123,4 @@ Convention of the order of the attribute keys has to be
     2. `CRCL_Working` - command started
     3. `CRCL_Done` - command finished
     4. `CRCL_Error` - command failed
-4. `StateDescription` : string - description of the state for humans
+4. (`StateDescription`) : string - description of the state for humans
