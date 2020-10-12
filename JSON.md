@@ -112,7 +112,6 @@ Convention of the order of the attribute keys has to be
 ### CRCLParam
 
 1. (`relative`) : float - fraction of the maximum translational speed.
-1. (`absolute`) : float - absolute value
 
 ### Examples
 
@@ -132,7 +131,6 @@ Convention of the order of the attribute keys has to be
 ### CRCLParam
 
 1. (`relative`) : float - fraction of the maximum translational acceleration.
-1. (`absolute`) : float - absolute value
 
 ### Examples
 
