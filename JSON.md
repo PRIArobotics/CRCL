@@ -88,7 +88,7 @@ Convention of the order of the attribute keys has to be
 ```
 
 
-## SetEndEffectorParameter
+## SetEndEffectorParameters
 
 ### CRCLParam
 
@@ -98,7 +98,7 @@ Convention of the order of the attribute keys has to be
 
 ```json
 {
-    "CRCLCommand" : "SetEndEffectorParameter", 
+    "CRCLCommand" : "SetEndEffectorParameters", 
     "Name" : "Use Tool 7", 
     "CommandID" : 5, 
     "CRCLParam" : {
@@ -143,6 +143,25 @@ Convention of the order of the attribute keys has to be
     "CommandID" : 7, 
     "CRCLParam" : {
         "relative" : 0.3
+    }
+}
+```
+
+## Wait
+
+### CRCLParam
+
+1. (`time`) : float - time im seconds to wait
+
+### Examples
+
+```json
+{
+    "CRCLCommand" : "Wait", 
+    "Name" : "Wait 0.5s", 
+    "CommandID" : 7, 
+    "CRCLParam" : {
+        "time" : 0.5
     }
 }
 ```
