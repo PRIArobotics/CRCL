@@ -39,20 +39,6 @@ Convention of the order of the attribute keys has to be
 
 ```json
 {
-    "CommandID" : 2,
-    "Name" : "Move Conveyor",
-    "CRCLCommand" : "MoveTo",
-    "CRCLParam" : { 
-        "Pose" : {
-            "X" : 0.0,
-        },
-        "Straight" : true,
-    }
-}
-```
-
-```json
-{
     "CommandID" : 3,
     "Name" : "Move Festo",
     "CRCLCommand" : "MoveTo",
@@ -62,6 +48,20 @@ Convention of the order of the attribute keys has to be
             "Y" : 120.0,
             "Z" : 90.0,
             "C" : 130.0
+        },
+        "Straight" : true,
+    }
+}
+```
+
+```json
+{
+    "CommandID" : 2,
+    "Name" : "Move Conveyor",
+    "CRCLCommand" : "MoveTo",
+    "CRCLParam" : { 
+        "Pose" : {
+            "X" : 0.0,
         },
         "Straight" : true,
     }
@@ -109,7 +109,7 @@ Convention of the order of the attribute keys has to be
     "CommandStatus": {
         "CommandID": 1,
         "StatusID": 1,
-        "CommandState": "Ready for execution"
+        "CommandState": "CRCL_Working"
     }
 }
 ```
