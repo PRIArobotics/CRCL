@@ -102,7 +102,7 @@ Convention of the order of the attribute keys has to be
 
 1. `ToolID` : integer - id of the tool, for example gripper id
 
-## Status response
+# CRCL Status
 
 ```json
 {
@@ -113,8 +113,6 @@ Convention of the order of the attribute keys has to be
     }
 }
 ```
-
-### Examples
 
 1. `CommandID` : integer - the CommandID of the command which is referenced with this status message
 2. `StatusID` : integer - the unique positive status identifier, incremental
