@@ -111,7 +111,7 @@ Convention of the order of the attribute keys has to be
 
 ### CRCLParam
 
-1. (`relative`) : float - fraction of the maximum translational speed.
+1. (`Relative`) : float - fraction of the maximum translational speed.
 
 ### Examples
 
@@ -121,7 +121,7 @@ Convention of the order of the attribute keys has to be
     "Name" : "Set Movement Speed to 50 percent", 
     "CommandID" : 6, 
     "CRCLParam" : {
-        "relative" : 0.3
+        "Relative" : 0.3
     }
 }
 ```
@@ -130,7 +130,7 @@ Convention of the order of the attribute keys has to be
 
 ### CRCLParam
 
-1. (`relative`) : float - fraction of the maximum translational acceleration.
+1. (`Relative`) : float - fraction of the maximum translational acceleration.
 
 ### Examples
 
@@ -140,7 +140,7 @@ Convention of the order of the attribute keys has to be
     "Name" : "Set movement acceleration to 50 percent", 
     "CommandID" : 7, 
     "CRCLParam" : {
-        "relative" : 0.3
+        "Relative" : 0.3
     }
 }
 ```
@@ -149,7 +149,7 @@ Convention of the order of the attribute keys has to be
 
 ### CRCLParam
 
-1. (`time`) : float - time im seconds to wait
+1. (`Time`) : float - time im seconds to wait
 
 ### Examples
 
@@ -159,7 +159,7 @@ Convention of the order of the attribute keys has to be
     "Name" : "Wait 0.5s", 
     "CommandID" : 7, 
     "CRCLParam" : {
-        "time" : 0.5
+        "Time" : 0.5
     }
 }
 ```
