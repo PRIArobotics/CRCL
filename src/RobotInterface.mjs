@@ -48,7 +48,7 @@ export default class RobotInterface {
             const c = this.queue.shift()
             console.log(`Sending: ${c.cmd} (${c.cid})`);
             this.sent.set(c.cid, new CRCLCommandStatus('CRCL_Sent', c.cid, -1))
-            await this.promiseSocket.write(Buffer.from(c.toJSON() + '\r\n', 'utf8'));
+            await this.promiseSocket.write(Buffer.from(c.toJSON() + '\n', 'utf8'));
         }
         this.sending = false
     }

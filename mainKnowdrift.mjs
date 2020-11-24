@@ -34,10 +34,9 @@ const d = {
 }
 
 async function runKuka(){
-    const kuka = new RobotInterface(3)
-    await kuka.connect(54600, '192.168.42.130')
     const kukaSafetyHeight = 550.0
     const commands = []
+    commands.push(new CRCLCommand("SetEndEffectorParameters","Using VacuumGripper2mm", {"ToolID": 2}))
     for (let i of [3, 4, 5,   7, 8]){
         const origin = d["KukaOriginPart"+i]
         commands.push(new CRCLCommand('MoveTo', 'Move high above Origin'+i, {"Straight":false,"Pose":setHeight(origin, kukaSafetyHeight)}))
@@ -56,16 +55,17 @@ async function runKuka(){
     for (let a of commands){
         console.log(a.toJSON())
     }
+
+    const kuka = new RobotInterface(3)
+    await kuka.connect(54600, '192.168.42.130')
     await kuka.schedule(commands)
     //kuka.disconnect()
 }
 
 async function runFesto(){
-    /*
-    const festo = new RobotInterface(3)
-    await festo.connect(9910, '192.168.42.xx')*/
     const festoSafetyHeight = 130.0
     const commands = []
+    commands.push(new CRCLCommand("SetEndEffectorParameters","Using :VacuumGripper_2mm", {"ToolID": 2}))
     for (let i of [3, 4, 5,   7, 8]){
         const origin = d["FestoOriginPart"+i]
         commands.push(new CRCLCommand('MoveTo', 'Move high above Origin'+i, {"Straight":false,"Pose":setHeight(origin, festoSafetyHeight)}))
@@ -84,9 +84,11 @@ async function runFesto(){
     for (let a of commands){
         console.log(a.toJSON())
     }
+    /*
+    const festo = new RobotInterface(3)
+    await festo.connect(9910, '192.168.42.xx')*/
     //await ri.schedule(commands)
     //ri.disconnect()
-
 }
 
 function setHeight(c, height){
@@ -97,5 +99,5 @@ function addHeight(c, height){
     return {'x':c['x'], 'y':c['y'], 'z':c['z']+height, 'a':c['a'], 'b':c['b'], 'c':c['c']}
 }
 
-//runKuka()
-runFesto()
+//runFesto()
+runKuka()
