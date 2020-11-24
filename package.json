@@ -2,7 +2,7 @@
   "name": "crcl",
   "version": "1.0.0",
   "description": "CRCL documentation and reference implementation",
-  "main": "main.mjs",
+  "main": "module.mjs",
   "scripts": {
     "test": "nyc mocha ./test",
     "start": "node main.mjs"

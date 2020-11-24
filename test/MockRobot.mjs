@@ -1,9 +1,9 @@
 import net from "net"
-import {CRCLCommand} from "../src/CRCLCommand.mjs";
+import CRCLCommand from "../src/CRCLCommand.mjs";
 import _ from 'lodash'
 import CRCLCommandStatus from "../src/CRCLCommandStatus.mjs";
 
-export class MockRobot {
+export default class MockRobot {
 
     constructor() {
         this.queue = []

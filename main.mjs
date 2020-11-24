@@ -1,5 +1,6 @@
-import {RobotInterface} from "./src/RobotInterface.mjs";
-import CommandFactory, {CRCLCommand} from "./src/CRCLCommand.mjs";
+import RobotInterface from "./src/RobotInterface.mjs";
+import CRCLCommand from "./src/CRCLCommand.mjs";
+import CommandFactory from "./src/CommandFactory.mjs";
 
 async function run(){
     const ri = new RobotInterface(3)

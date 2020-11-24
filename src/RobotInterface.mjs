@@ -3,7 +3,7 @@ import PromiseSocket from "promise-socket"
 import _ from 'lodash'
 import CRCLCommandStatus from "./CRCLCommandStatus.mjs";
 
-export class RobotInterface {
+export default class RobotInterface {
 
     constructor(maxSent) {
         this.queue = [] // list of commands to send in the future
