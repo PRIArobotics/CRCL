@@ -37,11 +37,8 @@ describe('MockRobotTest', function() {
             releasePart, wait, setTransSpeed, setTransAccel
         ];
         await ri.schedule(commands)
-        expect(ri.done.length).to.equal(commands.length)
         expect(ri.sent.size).to.equal(0)
         expect(ri.queue.length).to.equal(0)
-        expect(ri.done.every(s => s.state === 'CRCL_Done')).to.be.true
-
         ri.disconnect()
         server.stop()
     });

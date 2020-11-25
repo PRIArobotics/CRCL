@@ -5,11 +5,12 @@ import CRCLCommandStatus from "./CRCLCommandStatus.mjs";
 
 export default class RobotInterface {
 
-    constructor(maxSent) {
+    constructor(maxQueued) {
         this.queue = [] // list of commands to send in the future
         this.sent = new Map() // all sent commands with their newest status
-        this.done = [] // archive of finished commands
-        this.maxSent = maxSent // maximum number of entries in the sent queue
+        this.queued = new Map() // all sent commands with their newest status
+        this.maxQueued = maxQueued // maximum number of entries in the sent queue
+        this.maxSent = 1
         this.sending = false; // currently sending?
         this.callbacks = new Map()
     }
@@ -41,10 +42,11 @@ export default class RobotInterface {
         if (this.sending) return // skip if currently sending
         this.sending = true
 
-        // Send currently sent count difference to maxSent or queue maximum if lower
-        const sendCount = Math.min(this.maxSent-this.sent.size, this.queue.length)
-        if (sendCount > 0) console.log(`Sending ${sendCount} new messages`);
-        for (let i = 0; i<sendCount; i++){
+        const sentList = [...this.sent.values()]
+        const currentlySent = sentList.filter(status => status.state === 'CRCL_Sent').length
+        const currentlyQueued = sentList.filter(status => status.state === 'CRCL_Queued').length
+
+        if (currentlySent < this.maxSent && currentlyQueued < this.maxQueued && this.queue.length > 0){
             const c = this.queue.shift()
             console.log(`Sending: ${c.cmd} (${c.cid})`);
             this.sent.set(c.cid, new CRCLCommandStatus('CRCL_Sent', c.cid, -1))
@@ -64,9 +66,8 @@ export default class RobotInterface {
                 if (oldstatus.sid < status.sid) this.sent.set(status.cid, status)
 
             } else if (status.state === 'CRCL_Done') {
-                // remove from currently sent and put in archive
+                // remove from currently sent
                 this.sent.delete(status.cid)
-                this.done.push(status);
 
                 const callback = this.callbacks.get(status.cid)
                 if (callback) callback.resolve()
