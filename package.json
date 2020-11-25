@@ -5,7 +5,7 @@
   "main": "module.mjs",
   "scripts": {
     "test": "nyc mocha ./test",
-    "start": "node main.mjs"
+    "start": "node mainKnowdrift.mjs"
   },
   "repository": {
     "type": "git",

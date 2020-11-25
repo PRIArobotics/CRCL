@@ -31,6 +31,8 @@ const d = {
 
     "KukaOriginPart8": {"X": 153.594299,"Y": -744.390808,"Z": 113.840439,"A": -89.7869492,"B": -1.80688977,"C": -179.882446},
     "KukaTargetPart8" : {"X": 477.022308,"Y": 574.364868,"Z": 375.161926,"A": 0.119267054,"B": -1.8120935,"C": 176.730362},
+
+
 }
 
 async function runKuka(){
@@ -56,12 +58,11 @@ async function runKuka(){
         console.log(a.toJSON())
     }
 
-    /*
     const kuka = new RobotInterface(3)
     await kuka.connect(54600, '192.168.42.130')
     await kuka.schedule(commands)
     kuka.disconnect()
-     */
+
 }
 
 async function runFesto(){
@@ -123,6 +124,6 @@ function addHeight(c, height){
     return {"X":c["X"], "Y":c["Y"], "Z":c["Z"]+height, "A":c["A"], "B":c["B"], "C":c["C"]}
 }
 
-runFesto()
+//runFesto()
 runKuka()
-runConveyor()
+//runConveyor()
