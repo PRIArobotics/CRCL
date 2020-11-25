@@ -56,10 +56,12 @@ async function runKuka(){
         console.log(a.toJSON())
     }
 
+    /*
     const kuka = new RobotInterface(3)
     await kuka.connect(54600, '192.168.42.130')
     await kuka.schedule(commands)
-    //kuka.disconnect()
+    kuka.disconnect()
+     */
 }
 
 async function runFesto(){
@@ -86,9 +88,31 @@ async function runFesto(){
     }
     /*
     const festo = new RobotInterface(3)
-    await festo.connect(9910, '192.168.42.xx')*/
-    //await ri.schedule(commands)
-    //ri.disconnect()
+    await festo.connect(9910, '192.168.42.xx')
+    await festo.schedule(commands)
+    festo.disconnect()
+    */
+}
+
+async function runConveyor(){
+    const commands = []
+    for (let i of [1, 2, 3, 4, 5, 6, 7, 8]){
+        commands.push(new CRCLCommand("SetEndEffectorParameters","Using Tool"+i, {"ToolID": i}))
+        commands.push(new CRCLCommand('SetEndEffector',"Picking with Tool"+i,{"Setting": 1.0}));
+        commands.push(new CRCLCommand('SetEndEffector',"Releasing with Tool"+i,{"Setting": 0.0}));
+    }
+    commands.push(new CRCLCommand('MoveTo', 'Moving left', {"Straight":false,"Pose":{"X": -1, "Y": 0, "Z": 0, "A": 0, "B": 0, "C": 0}}))
+    commands.push(new CRCLCommand('MoveTo', 'Moving right', {"Straight":false,"Pose":{"X": 1, "Y": 0, "Z": 0, "A": 0, "B": 0, "C": 0}}))
+
+    for (let a of commands){
+        console.log(a.toJSON())
+    }
+    /*
+    const conveyor = new RobotInterface(3)
+    await conveyor.connect(9910, '192.168.42.xx')
+    await conveyor.schedule(commands)
+    conveyor.disconnect()
+    */
 }
 
 function setHeight(c, height){
@@ -99,5 +123,6 @@ function addHeight(c, height){
     return {"X":c["X"], "Y":c["Y"], "Z":c["Z"]+height, "A":c["A"], "B":c["B"], "C":c["C"]}
 }
 
-//runFesto()
+runFesto()
 runKuka()
+runConveyor()
