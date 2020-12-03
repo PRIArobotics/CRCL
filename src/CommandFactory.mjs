@@ -11,7 +11,7 @@ function MoveTo(name, poseMatrix, straight) {
     let t = new BABYLON.Vector3();
     poseMatrix.decompose(undefined, r, t);
     const a = [];
-    r.toEulerAngles("YZX").toArray(a); // YZX default
+    r.toEulerAngles("XYZ").toArray(a); // XYZ KUKA/ABB default
     poseMatrix = {
         "X": t.x,
         "Y": t.y,
@@ -27,8 +27,8 @@ function SetEndEffector(name, setting) {
     return Command("SetEndEffector", name, {"Setting" : setting});
 }
 
-function SetEndEffectorParameters(name, setting) {
-    return Command("SetEndEffectorParameters", name, {"Setting" : setting});
+function SetEndEffectorParameters(name, toolid) {
+    return Command("SetEndEffectorParameters", name, {"ToolID" : toolid});
 }
 
 function Wait(name, time) {

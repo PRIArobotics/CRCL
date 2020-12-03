@@ -26,6 +26,10 @@ export default class RobotInterface {
         return this;
     }
 
+    isConnected(){
+        return !this.socket.pending;
+    }
+
     schedule(cmds){
         return new Promise((resolve, error) => {
             this.queue.push(...cmds)
