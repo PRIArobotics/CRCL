@@ -8,14 +8,18 @@ function Command(cmd, name, param, cid){
 function MoveTo(name, poseMatrix, straight) {
     if (straight === undefined) straight = false;
     let r = new BABYLON.Quaternion();
-    let t = new BABYLON.Vector3();
-    poseMatrix.decompose(undefined, r, t);
-    const a = [];
+    let vec = new BABYLON.Vector3();
+    poseMatrix.decompose(undefined, r, vec);
+    let t = []
+    vec.toArray(t)
+    t = t.map(e => _.round(e, 3))
+    let a = [];
     r.toEulerAngles("XYZ").toArray(a); // XYZ KUKA/ABB default
+    a = a.map(BABYLON.Tools.ToDegrees).map(e => _.round(e, 3))
     poseMatrix = {
-        "X": t.x,
-        "Y": t.y,
-        "Z": t.z,
+        "X": t[0],
+        "Y": t[1],
+        "Z": t[2],
         "A": a[0],
         "B": a[1],
         "C": a[2],
