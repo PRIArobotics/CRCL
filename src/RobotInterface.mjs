@@ -8,7 +8,6 @@ export default class RobotInterface {
     constructor(maxQueued) {
         this.queue = [] // list of commands to send in the future
         this.sent = new Map() // all sent commands with their newest status
-        this.queued = new Map() // all sent commands with their newest status
         this.maxQueued = maxQueued // maximum number of entries in the sent queue
         this.maxSent = 1
         this.sending = false; // currently sending?
@@ -57,7 +56,7 @@ export default class RobotInterface {
 
         if (currentlySent < this.maxSent && currentlyQueued < this.maxQueued && this.queue.length > 0){
             const c = this.queue.shift()
-            console.log(`Sending: ${c.cmd} (${c.cid})`);
+            console.log(`Sending: ${c.cmd} (${c.cid}): ${c.toString()}`);
             this.sent.set(c.cid, new CRCLCommandStatus('CRCL_Sent', c.cid, -1))
             await this.promiseSocket.write(Buffer.from(c.toJSON() + '\r\n', 'utf8'));
         }
