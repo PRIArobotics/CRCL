@@ -17,11 +17,11 @@ export default class RobotInterface {
     async connect(port, address) {
         this.socket = new net.Socket()
         this.socket.on('data', (d) => this.receive(d))
-        this.socket.on('end', (e) => console.log('socket end', e))
-        this.socket.on('ready', (e) => console.log('socket ready', e))
-        this.socket.on('connect', (e) => console.log('socket connect', e))
-        this.socket.on('error', (e) => console.log('socket error', e))
-        this.socket.on('close', (e) => console.log('closed socket'))
+        this.socket.on('end', () => console.log('Socket received end'))
+        this.socket.on('ready', () => console.log('Socket ready'))
+        this.socket.on('connect', () => console.log('Socket connect'))
+        this.socket.on('error', (e) => console.log('Socket error:', e))
+        this.socket.on('close', () => console.log('Socket closed'))
 
         this.promiseSocket = new PromiseSocket.PromiseSocket(this.socket)
         console.log(`Connecting to robot @ ${address}:${port}`);
@@ -31,7 +31,7 @@ export default class RobotInterface {
     }
 
     isConnected(){
-        return !this.socket.pending;
+        return !this.socket.pending; // TODO
     }
 
     schedule(cmds){

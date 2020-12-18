@@ -39,23 +39,32 @@ const d = {
 async function runKuka(){
     const kukaSafetyHeight = 550.0
     const commands = []
+    const blending = 100
+    const slow = 0.1
+    const fast = 0.5
     commands.push(new CRCLCommand("SetEndEffectorParameters","Using VacuumGripper2mm", {"ToolID": 2}))
+    commands.push(CommandFactory.SetTransSpeed('Set fast speed', fast))
+
     for (let i of [3, 4, 5,   7, 8]){
         const origin = d["KukaOriginPart"+i]
-        commands.push(new CRCLCommand('MoveTo', 'Move high above Origin'+i, {"Blending" : 100, "Straight":false,"Pose":setHeight(origin, kukaSafetyHeight)}))
-        commands.push(new CRCLCommand('MoveTo', 'Move little bit above Origin'+i, {"Blending" : 100, "Straight":false,"Pose":addHeight(origin, 25)}))
+        commands.push(new CRCLCommand('MoveTo', 'Move high above Origin'+i, {"Blending" : blending, "Straight":false,"Pose":setHeight(origin, kukaSafetyHeight)}))
+        commands.push(new CRCLCommand('MoveTo', 'Move little bit above Origin'+i, {"Blending" : blending, "Straight":false,"Pose":addHeight(origin, 25)}))
+        commands.push(CommandFactory.SetTransSpeed('Set slow speed', slow))
         commands.push(new CRCLCommand('MoveTo', 'Move at Origin'+i, {"Straight":false,"Pose":origin}))
         commands.push(new CRCLCommand('SetEndEffector',"Picking Part"+i,{"Setting": 1.0}));
-        
-        commands.push(new CRCLCommand('MoveTo', 'Move above Origin'+i, {"Blending" : 100, "Straight":false,"Pose":setHeight(origin, kukaSafetyHeight)}))
+        commands.push(CommandFactory.SetTransSpeed('Set fast speed', fast))
+        commands.push(CommandFactory.Wait('Wait for 0.5s', 0.5))
+        commands.push(new CRCLCommand('MoveTo', 'Move above Origin'+i, {"Blending" : blending, "Straight":false,"Pose":setHeight(origin, kukaSafetyHeight)}))
 
         const target = d["KukaTargetPart"+i]
-        commands.push(new CRCLCommand('MoveTo', 'Move high above Target'+i, {"Blending" : 100, "Straight":false,"Pose":setHeight(target, kukaSafetyHeight)}))
-        commands.push(new CRCLCommand('MoveTo', 'Move little bit above Target'+i, {"Blending" : 100, "Straight":false,"Pose":addHeight(target, 25)}))
+        commands.push(new CRCLCommand('MoveTo', 'Move high above Target'+i, {"Blending" : blending, "Straight":false,"Pose":setHeight(target, kukaSafetyHeight)}))
+        commands.push(new CRCLCommand('MoveTo', 'Move little bit above Target'+i, {"Blending" : blending, "Straight":false,"Pose":addHeight(target, 25)}))
+        commands.push(CommandFactory.SetTransSpeed('Set slow speed', slow))
         commands.push(new CRCLCommand('MoveTo', 'Move at Target'+i, {"Straight":false,"Pose":target}))
         commands.push(new CRCLCommand('SetEndEffector',"Picking Target"+i,{"Setting": 0.0}));
-
-        commands.push(new CRCLCommand('MoveTo', 'Move above Target'+i, {"Blending" : 100, "Straight":false,"Pose":setHeight(target, kukaSafetyHeight)}))
+        commands.push(CommandFactory.SetTransSpeed('Set fast speed', fast))
+        commands.push(CommandFactory.Wait('Wait for 0.5s', 0.5))
+        commands.push(new CRCLCommand('MoveTo', 'Move above Target'+i, {"Blending" : blending, "Straight":false,"Pose":setHeight(target, kukaSafetyHeight)}))
     }
     for (let a of commands){
         console.log(a.toJSON())
@@ -79,7 +88,7 @@ async function runFesto(){
         commands.push(new CRCLCommand('MoveTo', 'Move at Origin'+i, {"Straight":false,"Pose":origin}))
         commands.push(new CRCLCommand('SetEndEffector',"Picking Part"+i,{"Setting": 1.0}));
         commands.push(new CRCLCommand('Wait','Wait 0.5s'+i,{"Time": 0.5}));
-      commands.push(new CRCLCommand('MoveTo', 'Move high above Origin'+i, {"Straight":false,"Pose":setHeight(origin, festoSafetyHeight)}))
+        commands.push(new CRCLCommand('MoveTo', 'Move high above Origin'+i, {"Straight":false,"Pose":setHeight(origin, festoSafetyHeight)}))
 
         const target = d["FestoTargetPart"+i]
         commands.push(new CRCLCommand('MoveTo', 'Move high above Target'+i, {"Straight":false,"Pose":setHeight(target, festoSafetyHeight)}))
@@ -95,7 +104,7 @@ async function runFesto(){
     const festo = new RobotInterface(3)
     await festo.connect(9817, '192.168.42.110')
     await festo.schedule(commands)
-    festo.disconnect()
+    await festo.disconnect()
 
 }
 
@@ -116,7 +125,7 @@ async function runConveyor(){
     const conveyor = new RobotInterface(3)
     await conveyor.connect(9902, '192.168.42.151')
     await conveyor.schedule(commands)
-    conveyor.disconnect()
+    await conveyor.disconnect()
 
 }
 
@@ -128,6 +137,6 @@ function addHeight(c, height){
     return {"X":c["X"], "Y":c["Y"], "Z":c["Z"]+height, "A":c["A"], "B":c["B"], "C":c["C"]}
 }
 
-runFesto()
-//runKuka()
+//runFesto()
+runKuka()
 //runConveyor()
