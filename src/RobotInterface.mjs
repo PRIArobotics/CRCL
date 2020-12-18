@@ -18,6 +18,11 @@ export default class RobotInterface {
     async connect(port, address) {
         this.socket = new net.Socket()
         this.socket.on('data', (d) => this.receive(d))
+        this.socket.on('end', (e) => console.log('socket end', e))
+        this.socket.on('ready', (e) => console.log('socket ready', e))
+        this.socket.on('connect', (e) => console.log('socket connect', e))
+        this.socket.on('error', (e) => console.log('socket error', e))
+        this.socket.on('close', (e) => console.log('closed socket'))
 
         this.promiseSocket = new PromiseSocket.PromiseSocket(this.socket)
         console.log(`Connecting to robot @ ${address}:${port}`);
@@ -85,8 +90,9 @@ export default class RobotInterface {
         await this.sendNext()
     }
 
-    disconnect(){
+    async disconnect(){
         console.log("Disconnecting from robot");
+        await this.promiseSocket.end()
         this.socket.destroy()
     }
 }

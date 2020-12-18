@@ -41,27 +41,29 @@ async function runKuka(){
     commands.push(new CRCLCommand("SetEndEffectorParameters","Using VacuumGripper2mm", {"ToolID": 2}))
     for (let i of [3, 4, 5,   7, 8]){
         const origin = d["KukaOriginPart"+i]
-        commands.push(new CRCLCommand('MoveTo', 'Move high above Origin'+i, {"Straight":false,"Pose":setHeight(origin, kukaSafetyHeight)}))
-        commands.push(new CRCLCommand('MoveTo', 'Move little bit above Origin'+i, {"Straight":false,"Pose":addHeight(origin, 25)}))
+        commands.push(new CRCLCommand('MoveTo', 'Move high above Origin'+i, {"Blending" : 100, "Straight":false,"Pose":setHeight(origin, kukaSafetyHeight)}))
+        commands.push(new CRCLCommand('MoveTo', 'Move little bit above Origin'+i, {"Blending" : 100, "Straight":false,"Pose":addHeight(origin, 25)}))
         commands.push(new CRCLCommand('MoveTo', 'Move at Origin'+i, {"Straight":false,"Pose":origin}))
         commands.push(new CRCLCommand('SetEndEffector',"Picking Part"+i,{"Setting": 1.0}));
-        commands.push(new CRCLCommand('MoveTo', 'Move above Origin'+i, {"Straight":false,"Pose":setHeight(origin, kukaSafetyHeight)}))
+        
+        commands.push(new CRCLCommand('MoveTo', 'Move above Origin'+i, {"Blending" : 100, "Straight":false,"Pose":setHeight(origin, kukaSafetyHeight)}))
 
         const target = d["KukaTargetPart"+i]
-        commands.push(new CRCLCommand('MoveTo', 'Move high above Target'+i, {"Straight":false,"Pose":setHeight(target, kukaSafetyHeight)}))
-        commands.push(new CRCLCommand('MoveTo', 'Move little bit above Target'+i, {"Straight":false,"Pose":addHeight(target, 25)}))
+        commands.push(new CRCLCommand('MoveTo', 'Move high above Target'+i, {"Blending" : 100, "Straight":false,"Pose":setHeight(target, kukaSafetyHeight)}))
+        commands.push(new CRCLCommand('MoveTo', 'Move little bit above Target'+i, {"Blending" : 100, "Straight":false,"Pose":addHeight(target, 25)}))
         commands.push(new CRCLCommand('MoveTo', 'Move at Target'+i, {"Straight":false,"Pose":target}))
         commands.push(new CRCLCommand('SetEndEffector',"Picking Target"+i,{"Setting": 0.0}));
-        commands.push(new CRCLCommand('MoveTo', 'Move above Target'+i, {"Straight":false,"Pose":setHeight(target, kukaSafetyHeight)}))
+
+        commands.push(new CRCLCommand('MoveTo', 'Move above Target'+i, {"Blending" : 100, "Straight":false,"Pose":setHeight(target, kukaSafetyHeight)}))
     }
     for (let a of commands){
         console.log(a.toJSON())
     }
 
-    const kuka = new RobotInterface(3)
+    const kuka = new RobotInterface(16)
     await kuka.connect(54600, '192.168.42.130')
     await kuka.schedule(commands)
-    kuka.disconnect()
+    await kuka.disconnect()
 
 }
 
