@@ -89,7 +89,7 @@ async function runAll(){
         addToQueue(kuka, new CRCLCommand('MoveTo', 'Move above Target'+i, {"Blending" : blending, "Straight":false,"Pose":setHeight(target, kukaSafetyHeight)}))
     }
 
-    //await kuka.connect(54600, '192.168.42.130')
+    await kuka.connect(54600, '192.168.42.130')
     //await festo.connect(9809, '192.168.42.110')
     //await conveyor.connect(9902, '192.168.42.151')
 
@@ -118,7 +118,7 @@ async function runAll(){
         console.log(g[0].robot.name)
         //g.forEach(cmd => console.log("  "+cmd.cmd.name))
         g.forEach(cmd => console.log("  "+cmd.cmd.toJSON()))
-        //await g[0].robot.schedule(g.map(e => e.cmd))
+        await g[0].robot.schedule(g.map(e => e.cmd))
     }
 }
 
