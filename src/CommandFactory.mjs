@@ -5,24 +5,15 @@ function Command(cmd, name, param, cid){
     return new CRCLCommand(cmd, name, param, cid)
 }
 
-function MoveTo(name, poseMatrix, straight) {
+function MoveTo(name, position, rotation, straight) {
     if (straight === undefined) straight = false;
-    let r = new BABYLON.Quaternion();
-    let vec = new BABYLON.Vector3();
-    poseMatrix.decompose(undefined, r, vec);
-    let t = []
-    vec.toArray(t)
-    t = t.map(e => _.round(e, 3))
-    let a = [];
-    r.toEulerAngles("XYZ").toArray(a); // XYZ KUKA/ABB default
-    a = a.map(BABYLON.Tools.ToDegrees).map(e => _.round(e, 3))
-    poseMatrix = {
-        "X": t[0],
-        "Y": t[1],
-        "Z": t[2],
-        "A": a[0],
-        "B": a[1],
-        "C": a[2],
+    const poseMatrix = {
+        "X": position[0],
+        "Y": position[1],
+        "Z": position[2],
+        "A": rotation[0],
+        "B": rotation[1],
+        "C": rotation[2],
     }
     return Command("MoveTo", name, {"Straight": straight, "Pose": poseMatrix});
 }

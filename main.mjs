@@ -1,4 +1,4 @@
-import RobotInterface from "./src/RobotInterface.mjs";
+import TCPRobotInterface from "./src/TCPRobotInterface.mjs";
 import CRCLCommand from "./src/CRCLCommand.mjs";
 import CommandFactory from "./src/CommandFactory.mjs";
 import fs from "fs"
@@ -17,11 +17,11 @@ async function runAll(){
     const approachdistance = 25
 
     const maxQueued = 5
-    const kuka = new RobotInterface(maxQueued)
+    const kuka = new TCPRobotInterface(maxQueued)
     kuka.name = 'Kuka'
-    const festo = new RobotInterface(maxQueued)
+    const festo = new TCPRobotInterface(maxQueued)
     festo.name = 'Festo'
-    const conveyor = new RobotInterface(maxQueued)
+    const conveyor = new TCPRobotInterface(maxQueued)
     conveyor.name = 'Conveyor'
 
     addToQueue(festo, new CRCLCommand("SetEndEffectorParameters","Using VacuumGripper_2mm", {"ToolID": 1}))
@@ -29,7 +29,6 @@ async function runAll(){
 
     addToQueue(festo, CommandFactory.SetTransSpeed('Set fast speed', fast))
     addToQueue(kuka, CommandFactory.SetTransSpeed('Set fast speed', fast))
-
 
     for (let i of [3, 4, 5,   7, 8]){
         const origin = d["FestoOriginPart"+i]
@@ -130,8 +129,8 @@ function setHeight(c, height){
     return {"X":c["X"], "Y":c["Y"], "Z":height, "A":c["A"], "B":c["B"], "C":c["C"]}
 }
 
-function addHeight(c, height){
-    return {"X":c["X"], "Y":c["Y"], "Z":c["Z"]+height, "A":c["A"], "B":c["B"], "C":c["C"]}
+function addHeight(c, height) {
+    return setHeight(c, c["Z"] + height)
 }
 
 runAll()

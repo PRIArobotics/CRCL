@@ -1,4 +1,4 @@
-import RobotInterface from "../src/RobotInterface.mjs";
+import TCPRobotInterface from "../src/TCPRobotInterface.mjs";
 import MockRobot from "./MockRobot.mjs";
 import CRCLCommand from "../src/CRCLCommand.mjs";
 import CommandFactory from "../src/CommandFactory.mjs";
@@ -10,14 +10,14 @@ const {expect} = chai;
 
 describe('MockRobotTest', function() {
 
-    it('PDDL1Problem', async function() {
+    it('TestRobotInterfaces', async function() {
 
         this.timeout(10000)
 
         const server = new MockRobot()
         await server.start(9910) // at localhost
 
-        const ri = new RobotInterface(3)
+        const ri = new TCPRobotInterface(3)
         await ri.connect(9910, 'localhost')
 
         const target1 = new CRCLCommand('MoveTo', 'Move to Con4Target', {"Straight":false,"Pose":{"X":680.54,"Y":500.0,"Z":-20.0,"A":0.0,"B":0.0,"C":0.0}});

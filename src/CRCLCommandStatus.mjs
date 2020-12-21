@@ -22,7 +22,7 @@ export class CRCLCommandStatus {
     }
 
     toString(){
-        return `${this.state}: ${this.cid} (${this.sid}) ${this.sdescription ? JSON.stringify(this.sdescription) : ''} `
+        return `${this.state}: ${this.cid} (${this.sid})${this.sdescription ? ' '+JSON.stringify(this.sdescription) : ''}`
     }
 }
 

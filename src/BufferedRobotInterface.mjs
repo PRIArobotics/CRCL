@@ -1,37 +1,15 @@
-import net from "net"
-import PromiseSocket from "promise-socket"
-import _ from 'lodash'
 import CRCLCommandStatus from "./CRCLCommandStatus.mjs";
 
-export default class RobotInterface {
+export default class BufferedRobotInterface {
 
-    constructor(maxQueued) {
+    constructor(maxQueued = 5, maxSent = 1) {
         this.queue = [] // list of commands to send in the future
         this.sent = new Map() // all sent commands with their newest status
+        this.sentTime = new Map()
         this.maxQueued = maxQueued // maximum number of entries in the sent queue
-        this.maxSent = 1
+        this.maxSent = maxSent
         this.sending = false; // currently sending?
         this.callbacks = new Map()
-    }
-
-    async connect(port, address) {
-        this.socket = new net.Socket()
-        this.socket.on('data', (d) => this.receive(d))
-        this.socket.on('end', () => console.log('Socket received end'))
-        this.socket.on('ready', () => console.log('Socket ready'))
-        this.socket.on('connect', () => console.log('Socket connect'))
-        this.socket.on('error', (e) => console.log('Socket error:', e))
-        this.socket.on('close', () => console.log('Socket closed'))
-
-        this.promiseSocket = new PromiseSocket.PromiseSocket(this.socket)
-        console.log(`Connecting to robot @ ${address}:${port}`);
-        await this.promiseSocket.connect(port, address)
-        console.log(`Connected to robot`)
-        return this;
-    }
-
-    isConnected(){
-        return !this.socket.pending; // TODO
     }
 
     schedule(cmds){
@@ -46,6 +24,14 @@ export default class RobotInterface {
         this.callbacks.set(cid, {resolve: resolve, error:error})
     }
 
+    async send(cmd){
+        throw new Error('Abstract Method.');
+    }
+
+    async disconnect(cmd){
+        throw new Error('Abstract Method.');
+    }
+
     async sendNext(){
         if (this.sending) return // skip if currently sending
         this.sending = true
@@ -56,18 +42,19 @@ export default class RobotInterface {
 
         if (currentlySent < this.maxSent && currentlyQueued < this.maxQueued && this.queue.length > 0){
             const c = this.queue.shift()
-            console.log(`Sending: ${c.cmd} (${c.cid}): ${c.toString()}`);
+            console.log(`Sending: ${c.cmd} (${c.cid})`);
             this.sent.set(c.cid, new CRCLCommandStatus('CRCL_Sent', c.cid, -1))
-            await this.promiseSocket.write(Buffer.from(c.toJSON() + '\r\n', 'utf8'));
+            this.sentTime.set(c.cid, new Date())
+            await this.send(c);
         }
         this.sending = false
     }
 
-    async receive(buffer){
-        for (const line of buffer.toString().split(/\r?\n/).filter(_.negate(_.isEmpty))){
+    async receive(lines){
+        for (const line of lines){
             const status = CRCLCommandStatus.fromJSON(line)
-            console.log(`Received: ${status.toString()}`)
-
+            let dt = new Date().getTime() - this.sentTime.get(status.cid).getTime()
+            console.log(`Received: ${status.toString()} ${status.state === 'CRCL_Queued' ? dt + 'ms' : ''}`)
             if (status.state === 'CRCL_Queued' || status.state === 'CRCL_Working' ) {
                 // update status if newer
                 const oldstatus = this.sent.get(status.cid)
@@ -76,22 +63,18 @@ export default class RobotInterface {
             } else if (status.state === 'CRCL_Done') {
                 // remove from currently sent
                 this.sent.delete(status.cid)
+                this.sentTime.delete(status.cid)
 
                 const callback = this.callbacks.get(status.cid)
+                this.callbacks.delete(status.cid)
                 if (callback) callback.resolve()
             } else {
                 const error = 'Received invalid message:' + status.toString()
                 console.log(error)
                 for (c of this.callbacks.values()) c.error(error)
-                this.disconnect()
+                await this.disconnect()
             }
         }
         await this.sendNext()
-    }
-
-    async disconnect(){
-        console.log("Disconnecting from robot");
-        await this.promiseSocket.end()
-        this.socket.destroy()
     }
 }
