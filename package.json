@@ -1,5 +1,5 @@
 {
-  "name": "crcl",
+  "name": "crcljs-node",
   "version": "1.0.0",
   "description": "CRCLJS-Node implementation",
   "main": "module.mjs",
