@@ -1,7 +1,7 @@
 {
   "name": "crcl",
   "version": "1.0.0",
-  "description": "CRCL documentation and reference implementation",
+  "description": "CRCLJS-Node implementation",
   "main": "module.mjs",
   "scripts": {
     "test": "nyc mocha ./test",
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/PRIArobotics/CRCL.git"
+    "url": "git+https://github.com/PRIArobotics/CRCLJS-Node.git"
   },
   "keywords": [
     "crcl",
@@ -19,9 +19,9 @@
   "author": "Timon Hoebert",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/PRIArobotics/CRCL/issues"
+    "url": "https://github.com/PRIArobotics/CRCLJS-Node/issues"
   },
-  "homepage": "https://github.com/PRIArobotics/CRCL#readme",
+  "homepage": "https://github.com/PRIArobotics/CRCLJS-Node#readme",
   "dependencies": {
     "lodash": "^4.17.15",
     "promise-socket": "^7.0.0"
