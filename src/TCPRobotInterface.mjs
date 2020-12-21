@@ -1,8 +1,7 @@
 import net from "net"
 import PromiseSocket from "promise-socket"
 import _ from 'lodash'
-import CRCLCommandStatus from "./CRCLCommandStatus.mjs";
-import BufferedRobotInterface from "./BufferedRobotInterface.mjs";
+import {CRCLCommandStatus, BufferedRobotInterface} from 'crcljs';
 
 export default class TCPRobotInterface extends BufferedRobotInterface{
 

@@ -1,7 +1,6 @@
 import net from "net"
-import CRCLCommand from "../src/CRCLCommand.mjs";
 import _ from 'lodash'
-import CRCLCommandStatus from "../src/CRCLCommandStatus.mjs";
+import {CRCLCommand, CRCLCommandStatus} from 'crcljs';
 
 export default class MockRobot {
 
