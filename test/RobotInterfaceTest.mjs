@@ -1,9 +1,9 @@
-import {CRCLCommand, CommandFactory} from 'crcljs';
+import {CRCLCommand, CommandFactory, BufferedRobotInterface} from 'crcljs';
 
 import assert from 'assert';
 import sinon from 'sinon';
 import chai from 'chai';
-import TCPRobotInterface from "../src/TCPRobotInterface.mjs";
+import TCPRobotConnection from "../src/TCPRobotConnection.mjs";
 import MockRobot from "./MockRobot.mjs";
 const {expect} = chai;
 
@@ -16,8 +16,7 @@ describe('MockRobotTest', function() {
         const server = new MockRobot()
         await server.start(9913) // at localhost
 
-        const ri = new TCPRobotInterface(9913, 'localhost', 3)
-        await ri.connect()
+        const ri = new BufferedRobotInterface(new TCPRobotConnection('Testbot', 9913, 'localhost'))
 
         const target1 = new CRCLCommand('MoveTo', 'Move to Con4Target', {"Straight":false,"Pose":{"X":680.54,"Y":500.0,"Z":-20.0,"A":0.0,"B":0.0,"C":0.0}});
         const target2 = new CRCLCommand('MoveTo', 'Move to Con3',{"Straight":false,"Pose":{"X":680.54,"Y":400.0,"Z":-20.0,"A":0.0,"B":0.0,"C":0.0}});

@@ -1,5 +1,5 @@
-import TCPRobotInterface from "./src/TCPRobotInterface.mjs"
+import TCPRobotConnection from "./src/TCPRobotConnection.mjs"
 
 export {
-    TCPRobotInterface
+    TCPRobotConnection
 }
