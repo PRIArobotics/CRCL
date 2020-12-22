@@ -14,10 +14,10 @@ describe('MockRobotTest', function() {
         this.timeout(10000)
 
         const server = new MockRobot()
-        await server.start(9911) // at localhost
+        await server.start(9913) // at localhost
 
-        const ri = new TCPRobotInterface(3)
-        await ri.connect(9911, 'localhost')
+        const ri = new TCPRobotInterface(9913, 'localhost', 3)
+        await ri.connect()
 
         const target1 = new CRCLCommand('MoveTo', 'Move to Con4Target', {"Straight":false,"Pose":{"X":680.54,"Y":500.0,"Z":-20.0,"A":0.0,"B":0.0,"C":0.0}});
         const target2 = new CRCLCommand('MoveTo', 'Move to Con3',{"Straight":false,"Pose":{"X":680.54,"Y":400.0,"Z":-20.0,"A":0.0,"B":0.0,"C":0.0}});

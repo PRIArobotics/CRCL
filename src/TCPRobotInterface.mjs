@@ -5,11 +5,13 @@ import {CRCLCommandStatus, BufferedRobotInterface} from 'crcljs';
 
 export default class TCPRobotInterface extends BufferedRobotInterface{
 
-    constructor(maxQueued = 5, maxSent = 1) {
+    constructor(port, address, maxQueued = 5, maxSent = 1) {
         super(maxQueued, maxSent)
+        this.port = port
+        this.address = address
     }
 
-    async connect(port, address) {
+    async connect() {
         this.socket = new net.Socket()
         this.socket.on('data', (d) => this.receive(d))
         this.socket.on('end', () => console.log('Socket received end'))
@@ -19,8 +21,8 @@ export default class TCPRobotInterface extends BufferedRobotInterface{
         this.socket.on('close', () => console.log('Socket closed'))
 
         this.promiseSocket = new PromiseSocket.PromiseSocket(this.socket)
-        console.log(`Connecting to robot @ ${address}:${port}`);
-        await this.promiseSocket.connect(port, address)
+        console.log(`Connecting to robot @ ${this.address}:${this.port}`);
+        await this.promiseSocket.connect(this.port, this.address)
         console.log(`Connected to robot`)
         return this;
     }
