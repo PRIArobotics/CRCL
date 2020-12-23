@@ -18,10 +18,10 @@ export default class TCPRobotConnection extends Emitter {
 
     async connect() {
         this.socket = new net.Socket()
-        this.socket.on('data', (buffer) => this.onData(buffer))
+        this.socket.on('data', (buffer) => this.onStatus(buffer))
         this.socket.on('end', () => console.log('Socket received end'))
         this.socket.on('ready', () => console.log('Socket ready'))
-        this.socket.on('connect', () => console.log('Socket connect'))
+        //this.socket.on('connect', () => console.log('Socket connect'))
         this.socket.on('error', (e) => console.log('Socket error:', e))
         this.socket.on('close', () => console.log('Socket closed'))
 
@@ -38,13 +38,13 @@ export default class TCPRobotConnection extends Emitter {
     }
 
     emit(name, line){
-        if (this.name !== this.name) throw new Error('Wrong robot name provided')
-        this.log(`Emitting: ${line}`)
+        if (name !== this.name) throw new Error('Wrong robot name provided')
+        //this.log(`Emitting: ${line}`)
         this.promiseSocket.write(Buffer.from(line + '\r\n', 'utf8'));
     }
 
-    onData(buffer) {
-        this.log(`Received: ${buffer.toString()}`)
+    onStatus(buffer) {
+        //this.log(`Received: ${buffer.toString()}`)
         const lines = buffer.toString().split(/\r?\n/).filter(_.negate(_.isEmpty))
         lines.forEach(line => super.emit(this.name, line))
     }

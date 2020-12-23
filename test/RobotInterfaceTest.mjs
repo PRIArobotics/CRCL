@@ -10,33 +10,18 @@ const {expect} = chai;
 describe('MockRobotTest', function() {
 
     it('TestRobotInterfaces', async function() {
+        this.timeout(3000)
 
-        this.timeout(10000)
+        const port = 8857
+        const server = new MockRobot('MockRobot')
+        await server.start(port) // at localhost
 
-        const server = new MockRobot()
-        await server.start(9913) // at localhost
+        const ri = new BufferedRobotInterface(new TCPRobotConnection('Testbot', port, 'localhost'))
 
-        const ri = new BufferedRobotInterface(new TCPRobotConnection('Testbot', 9913, 'localhost'))
+        const c1 = new CRCLCommand('SetEndEffector',"Picking0",{"Setting": 0.0})
+        const c2 = new CRCLCommand('SetEndEffector',"Picking1",{"Setting": 1.0})
 
-        const target1 = new CRCLCommand('MoveTo', 'Move to Con4Target', {"Straight":false,"Pose":{"X":680.54,"Y":500.0,"Z":-20.0,"A":0.0,"B":0.0,"C":0.0}});
-        const target2 = new CRCLCommand('MoveTo', 'Move to Con3',{"Straight":false,"Pose":{"X":680.54,"Y":400.0,"Z":-20.0,"A":0.0,"B":0.0,"C":0.0}});
-        const target3 = new CRCLCommand('MoveTo', 'Move to Con3',{"Straight":false,"Pose":{"X":680.54,"Y":300.0,"Z":-20.0,"A":0.0,"B":0.0,"C":0.0}});
-        const selectP1Vacuum = new CRCLCommand("SetEndEffectorParameters","Using :VacuumGripper_2mm", {"ToolID": 0});
-        const selectP2Vacuum = new CRCLCommand("SetEndEffectorParameters","Using :VacuumGripper_4mm",{"ToolID": 1});
-        const grabPPart = new CRCLCommand('SetEndEffector',"Picking :Part_REL1",{"Setting": 1.0});
-        const releasePart = new CRCLCommand('SetEndEffector',"Picking :Part_REL1",{"Setting": 0.0});
-        const wait = CommandFactory.Wait('Wait for 0.5s', 0.5)
-        const setTransSpeed = CommandFactory.SetTransSpeed('Set acceleration to 50 percent', 0.5)
-        const setTransAccel = CommandFactory.SetTransAccel('Set speed to 50 percent', 0.5)
-
-
-        const commands = [
-            target1, target2, target3, selectP1Vacuum, selectP2Vacuum, grabPPart,
-            releasePart, wait, setTransSpeed, setTransAccel
-        ];
-        await ri.schedule(commands)
-        expect(ri.sent.size).to.equal(0)
-        expect(ri.queue.length).to.equal(0)
+        await ri.schedule([c1, c2])
         ri.disconnect()
         server.stop()
     });
