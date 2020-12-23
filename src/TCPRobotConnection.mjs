@@ -19,11 +19,11 @@ export default class TCPRobotConnection extends Emitter {
     async connect() {
         this.socket = new net.Socket()
         this.socket.on('data', (buffer) => this.onStatus(buffer))
-        this.socket.on('end', () => console.log('Socket received end'))
-        this.socket.on('ready', () => console.log('Socket ready'))
-        //this.socket.on('connect', () => console.log('Socket connect'))
-        this.socket.on('error', (e) => console.log('Socket error:', e))
-        this.socket.on('close', () => console.log('Socket closed'))
+        this.socket.on('end', () => this.log('Socket received end'))
+        //this.socket.on('ready', () => this.log('Socket ready'))
+        //this.socket.on('connect', () => this.log('Socket connect'))
+        this.socket.on('error', (e) => this.log('Socket error:', e))
+        this.socket.on('close', () => this.log('Socket closed'))
 
         this.promiseSocket = new PromiseSocket.PromiseSocket(this.socket)
         this.log(`Connecting ${this.address}:${this.port}`);
