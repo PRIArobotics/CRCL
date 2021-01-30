@@ -17,6 +17,7 @@ describe('MockRobotTest', function() {
         await server.start(port) // at localhost
 
         const ri = new BufferedRobotInterface(new TCPRobotConnection('Testbot', port, 'localhost'))
+        await ri.connect()
 
         const c1 = new CRCLCommand('SetEndEffector',"Picking0",{"Setting": 0.0})
         const c2 = new CRCLCommand('SetEndEffector',"Picking1",{"Setting": 1.0})
