@@ -10,6 +10,7 @@ export default class TCPRobotConnection extends Emitter {
         this.name = name
         this.port = port
         this.address = address
+        this.isConnecting = false
     }
 
     log(message){
@@ -17,6 +18,7 @@ export default class TCPRobotConnection extends Emitter {
     }
 
     async connect() {
+        this.isConnecting = true
         this.socket = new net.Socket()
         this.socket.on('data', (buffer) => this.onStatus(buffer))
         this.socket.on('end', () => this.log('Socket received end'))
@@ -24,11 +26,15 @@ export default class TCPRobotConnection extends Emitter {
         //this.socket.on('connect', () => this.log('Socket connect'))
         this.socket.on('error', (e) => this.log('Socket error:', e))
         this.socket.on('close', () => this.log('Socket closed'))
-
-        this.promiseSocket = new PromiseSocket.PromiseSocket(this.socket)
-        this.log(`Connecting ${this.address}:${this.port}`);
-        await this.promiseSocket.connect(this.port, this.address)
-        this.log(`Connected`)
+        try {
+            this.promiseSocket = new PromiseSocket.PromiseSocket(this.socket)
+            this.log(`Connecting ${this.address}:${this.port}`);
+            await this.promiseSocket.connect(this.port, this.address)
+            this.log(`Connected`)
+        } catch (error){
+            console.error(`Could not connect to ${this.address}:${this.port}: ${error.message}`)
+        }
+        this.isConnecting = false
         return this;
     }
 

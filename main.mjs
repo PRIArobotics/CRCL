@@ -1,6 +1,6 @@
 import fs from "fs"
 
-import {CommandFactory, MultiRobotInterface, BufferedRobotInterface, CRCLCommand} from 'crcljs';
+import {CommandFactory, MultiRobotInterface, CRCLCommand, RobotInterface} from 'crcljs';
 import {TCPRobotConnection} from "./module.mjs";
 
 const d = JSON.parse(fs.readFileSync('positions.json', 'utf8'));
@@ -19,9 +19,10 @@ async function runAll(){
     const maxQueued = 5
 
     const robots = new MultiRobotInterface()
-    robots.addRobot(new BufferedRobotInterface(new TCPRobotConnection('Kuka', 6666, 'localhost')))
-    robots.addRobot(new BufferedRobotInterface(new TCPRobotConnection('Festo', 6667, 'localhost')))
-    robots.addRobot(new BufferedRobotInterface(new TCPRobotConnection('Conveyor', 6668,'localhost')))
+    robots.addRobot(new RobotInterface(new TCPRobotConnection('Kuka', 54600, '192.168.42.130')))
+    robots.addRobot(new RobotInterface(new TCPRobotConnection('Festo', 6667, 'localhost')))
+    robots.addRobot(new RobotInterface(new TCPRobotConnection('Conveyor', 6668,'localhost')))
+    const enabledRobots = ['Kuka']
 
     /*
     robots.addRobot(new BufferedRobotInterface(new TCPRobotConnection(':Robot_Kuka_KR6_R700', 54600, '192.168.42.130')))
@@ -93,11 +94,8 @@ async function runAll(){
         robots.addToQueue('Kuka', new CRCLCommand('MoveTo', 'Move above Target'+i, {"Blending" : blending, "Straight":false,"Pose":setHeight(target, kukaSafetyHeight)}))
     }
 
-    queue = queue.filter(e =>
-        e.robot === kuka
-        //e.robot === conveyor ||
-        //e.robot === festo
-    )
+    const deleteRobots = robots.getRobotNamesList().filter(rn => rn != enabledRobots)
+    deleteRobots.map(rn => robots.getRobotByName(rn)).forEach(r => robots.removeRobot(r))
 
     await robots.groupQueue()
     await robots.printQueue()

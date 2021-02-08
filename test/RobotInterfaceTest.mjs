@@ -1,4 +1,4 @@
-import {CRCLCommand, CommandFactory, BufferedRobotInterface} from 'crcljs';
+import {CRCLCommand, CommandFactory, RobotInterface} from 'crcljs';
 
 import assert from 'assert';
 import sinon from 'sinon';
@@ -16,7 +16,7 @@ describe('MockRobotTest', function() {
         const server = new MockRobot('MockRobot')
         await server.start(port) // at localhost
 
-        const ri = new BufferedRobotInterface(new TCPRobotConnection('Testbot', port, 'localhost'))
+        const ri = new RobotInterface(new TCPRobotConnection('Testbot', port, 'localhost'))
         await ri.connect()
 
         const c1 = new CRCLCommand('SetEndEffector',"Picking0",{"Setting": 0.0})
