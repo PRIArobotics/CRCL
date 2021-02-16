@@ -20,15 +20,9 @@ async function runAll(){
 
     const robots = new MultiRobotInterface()
     robots.addRobot(new RobotInterface(new TCPRobotConnection('Kuka', 54600, '192.168.42.130')))
-    robots.addRobot(new RobotInterface(new TCPRobotConnection('Festo', 6667, 'localhost')))
-    robots.addRobot(new RobotInterface(new TCPRobotConnection('Conveyor', 6668,'localhost')))
-    const enabledRobots = ['Kuka']
-
-    /*
-    robots.addRobot(new BufferedRobotInterface(new TCPRobotConnection(':Robot_Kuka_KR6_R700', 54600, '192.168.42.130')))
-    robots.addRobot(new BufferedRobotInterface(new TCPRobotConnection(':Robot_FestoPortal', 9910, '192.168.42.110')))
-    robots.addRobot(new BufferedRobotInterface(new TCPRobotConnection(':Robot_Conveyor', 9912,'192.168.42.111')))
-     */
+    robots.addRobot(new RobotInterface(new TCPRobotConnection('Festo', 9811, '192.168.42.110')))
+    robots.addRobot(new RobotInterface(new TCPRobotConnection('Conveyor', 9912,'192.168.42.111')))
+    const enabledRobots = ['Festo']
 
     robots.addToQueue('Festo', new CRCLCommand("SetEndEffectorParameters","Using VacuumGripper_2mm", {"ToolID": 1}))
     robots.addToQueue('Kuka', new CRCLCommand("SetEndEffectorParameters","Using VacuumGripper_2mm", {"ToolID": 2}))
