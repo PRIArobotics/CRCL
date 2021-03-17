@@ -20,15 +20,16 @@ async function runAll(){
 
     const robots = new MultiRobotInterface()
     robots.addRobot(new RobotInterface(new TCPRobotConnection('Kuka', 54600, '192.168.42.130')))
-    robots.addRobot(new RobotInterface(new TCPRobotConnection('Festo', 9811, '192.168.42.110')))
-    robots.addRobot(new RobotInterface(new TCPRobotConnection('Conveyor', 9912,'192.168.42.111')))
-    const enabledRobots = ['Festo']
+    robots.addRobot(new RobotInterface(new TCPRobotConnection('Festo', 9810, '192.168.42.110')))
+    robots.addRobot(new RobotInterface(new TCPRobotConnection('Conveyor', 9902,'192.168.42.151')))
+    const enabledRobots = ['Kuka', 'Conveyor']
 
     robots.addToQueue('Festo', new CRCLCommand("SetEndEffectorParameters","Using VacuumGripper_2mm", {"ToolID": 1}))
-    robots.addToQueue('Kuka', new CRCLCommand("SetEndEffectorParameters","Using VacuumGripper_2mm", {"ToolID": 2}))
-
     robots.addToQueue('Festo', CommandFactory.SetTransSpeed('Set fast speed', fast))
+
+    robots.addToQueue('Kuka', new CRCLCommand("SetEndEffectorParameters","Using VacuumGripper_2mm", {"ToolID": 2}))
     robots.addToQueue('Kuka', CommandFactory.SetTransSpeed('Set fast speed', fast))
+
 
     for (let i of [3, 4, 5,   7, 8]){
         const origin = d["FestoOriginPart"+i]
@@ -88,7 +89,7 @@ async function runAll(){
         robots.addToQueue('Kuka', new CRCLCommand('MoveTo', 'Move above Target'+i, {"Blending" : blending, "Straight":false,"Pose":setHeight(target, kukaSafetyHeight)}))
     }
 
-    const deleteRobots = robots.getRobotNamesList().filter(rn => rn != enabledRobots)
+    const deleteRobots = robots.getRobotNamesList().filter(rn => !enabledRobots.includes(rn))
     deleteRobots.map(rn => robots.getRobotByName(rn)).forEach(r => robots.removeRobot(r))
 
     await robots.groupQueue()
