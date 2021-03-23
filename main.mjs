@@ -22,7 +22,7 @@ async function runAll(){
     robots.addRobot(new RobotInterface(new TCPRobotConnection('Kuka', 54600, '192.168.42.130')))
     robots.addRobot(new RobotInterface(new TCPRobotConnection('Festo', 9810, '192.168.42.110')))
     robots.addRobot(new RobotInterface(new TCPRobotConnection('Conveyor', 9902,'192.168.42.151')))
-    const enabledRobots = ['Kuka', 'Conveyor']
+    const enabledRobots = ['Conveyor']
 
     robots.addToQueue('Festo', new CRCLCommand("SetEndEffectorParameters","Using VacuumGripper_2mm", {"ToolID": 1}))
     robots.addToQueue('Festo', CommandFactory.SetTransSpeed('Set fast speed', fast))
@@ -66,27 +66,27 @@ async function runAll(){
 
     for (let i of [3, 4, 5,   7, 8]){
         const origin = d["KukaOriginPart"+i]
-        robots.addToQueue('Kuka', new CRCLCommand('MoveTo', 'Move high above Origin'+i, {"Blending" : blending, "Straight":false,"Pose":setHeight(origin, kukaSafetyHeight)}))
-        robots.addToQueue('Kuka', new CRCLCommand('MoveTo', 'Move little bit above Origin'+i, {"Blending" : blending, "Straight":false,"Pose":addHeight(origin, approachdistance)}))
+        robots.addToQueue('Kuka', new CRCLCommand('MoveTo', 'Move high above Origin'+(i+8), {"Blending" : blending, "Straight":false,"Pose":setHeight(origin, kukaSafetyHeight)}))
+        robots.addToQueue('Kuka', new CRCLCommand('MoveTo', 'Move little bit above Origin'+(i+8), {"Blending" : blending, "Straight":false,"Pose":addHeight(origin, approachdistance)}))
         robots.addToQueue('Kuka', CommandFactory.SetTransSpeed('Set slow speed', slow))
-        robots.addToQueue('Kuka', new CRCLCommand('MoveTo', 'Move at Origin'+i, {"Straight":false,"Pose":origin}))
-        robots.addToQueue('Kuka', new CRCLCommand('SetEndEffector',"Picking Part"+i,{"Setting": 1.0}));
+        robots.addToQueue('Kuka', new CRCLCommand('MoveTo', 'Move at Origin'+(i+8), {"Straight":false,"Pose":origin}))
+        robots.addToQueue('Kuka', new CRCLCommand('SetEndEffector',"Picking Part"+(i+8),{"Setting": 1.0}));
 
-        robots.addToQueue('Conveyor', new CRCLCommand("SetEndEffectorParameters","Using Nest"+i, {"ToolID": i}))
-        robots.addToQueue('Conveyor', new CRCLCommand('SetEndEffector',"Opening Nest"+i,{"Setting": 1.0}));
+        robots.addToQueue('Conveyor', new CRCLCommand("SetEndEffectorParameters","Using Nest"+(i+8), {"ToolID": (i+8)}))
+        robots.addToQueue('Conveyor', new CRCLCommand('SetEndEffector',"Opening Nest"+(i+8),{"Setting": 1.0}));
         robots.addToQueue('Kuka', CommandFactory.SetTransSpeed('Set fast speed', fast))
         robots.addToQueue('Kuka', CommandFactory.Wait('Wait for 0.5s', waittime))
-        robots.addToQueue('Kuka', new CRCLCommand('MoveTo', 'Move above Origin'+i, {"Blending" : blending, "Straight":false,"Pose":setHeight(origin, kukaSafetyHeight)}))
+        robots.addToQueue('Kuka', new CRCLCommand('MoveTo', 'Move above Origin'+(i+8), {"Blending" : blending, "Straight":false,"Pose":setHeight(origin, kukaSafetyHeight)}))
 
         const target = d["KukaTargetPart"+i]
-        robots.addToQueue('Kuka', new CRCLCommand('MoveTo', 'Move high above Target'+i, {"Blending" : blending, "Straight":false,"Pose":setHeight(target, kukaSafetyHeight)}))
-        robots.addToQueue('Kuka', new CRCLCommand('MoveTo', 'Move little bit above Target'+i, {"Blending" : blending, "Straight":false,"Pose":addHeight(target, approachdistance)}))
+        robots.addToQueue('Kuka', new CRCLCommand('MoveTo', 'Move high above Target'+(i+8), {"Blending" : blending, "Straight":false,"Pose":setHeight(target, kukaSafetyHeight)}))
+        robots.addToQueue('Kuka', new CRCLCommand('MoveTo', 'Move little bit above Target'+(i+8), {"Blending" : blending, "Straight":false,"Pose":addHeight(target, approachdistance)}))
         robots.addToQueue('Kuka', CommandFactory.SetTransSpeed('Set slow speed', slow))
-        robots.addToQueue('Kuka', new CRCLCommand('MoveTo', 'Move at Target'+i, {"Straight":false,"Pose":target}))
-        robots.addToQueue('Kuka', new CRCLCommand('SetEndEffector',"Picking Target"+i,{"Setting": 0.0}));
+        robots.addToQueue('Kuka', new CRCLCommand('MoveTo', 'Move at Target'+(i+8), {"Straight":false,"Pose":target}))
+        robots.addToQueue('Kuka', new CRCLCommand('SetEndEffector',"Picking Target"+(i+8),{"Setting": 0.0}));
         robots.addToQueue('Kuka', CommandFactory.SetTransSpeed('Set fast speed', fast))
         robots.addToQueue('Kuka', CommandFactory.Wait('Wait for 0.5s', waittime))
-        robots.addToQueue('Kuka', new CRCLCommand('MoveTo', 'Move above Target'+i, {"Blending" : blending, "Straight":false,"Pose":setHeight(target, kukaSafetyHeight)}))
+        robots.addToQueue('Kuka', new CRCLCommand('MoveTo', 'Move above Target'+(i+8), {"Blending" : blending, "Straight":false,"Pose":setHeight(target, kukaSafetyHeight)}))
     }
 
     const deleteRobots = robots.getRobotNamesList().filter(rn => !enabledRobots.includes(rn))
