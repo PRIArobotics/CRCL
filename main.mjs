@@ -22,7 +22,7 @@ async function runAll(){
     robots.addRobot(new RobotInterface(new TCPRobotConnection('Kuka', 54600, '192.168.42.130')))
     robots.addRobot(new RobotInterface(new TCPRobotConnection('Festo', 9810, '192.168.42.110')))
     robots.addRobot(new RobotInterface(new TCPRobotConnection('Conveyor', 9902,'192.168.42.151')))
-    const enabledRobots = ['Conveyor']
+    const enabledRobots = ['Festo','Kuka','Conveyor']
 
     robots.addToQueue('Festo', new CRCLCommand("SetEndEffectorParameters","Using VacuumGripper_2mm", {"ToolID": 1}))
     robots.addToQueue('Festo', CommandFactory.SetTransSpeed('Set fast speed', fast))
@@ -94,9 +94,14 @@ async function runAll(){
 
     await robots.groupQueue()
     await robots.printQueue()
+
+
+
     await robots.connectAll()
     await robots.sendQueues()
     await robots.disconnectAll()
+
+
 }
 
 function setHeight(c, height){

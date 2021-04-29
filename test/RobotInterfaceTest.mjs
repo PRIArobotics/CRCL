@@ -10,7 +10,7 @@ const {expect} = chai;
 describe('MockRobotTest', function() {
 
     it('TestRobotInterfaces', async function() {
-        this.timeout(3000)
+        this.timeout(10000)
 
         const port = 8857
         const server = new MockRobot('MockRobot')
