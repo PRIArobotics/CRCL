@@ -51,7 +51,7 @@ async function runAll(){
         robots.addToQueue('Conveyor', new CRCLCommand("SetEndEffectorParameters","Using Nest"+i, {"ToolID": i}))
         robots.addToQueue('Conveyor', new CRCLCommand('SetEndEffector',"Opening Nest"+i,{"Setting": 1.0}));
 
-        robots.addToQueue('Festo', new CRCLCommand('MoveTo', 'Move at Target'+i, {"Straight":false,"Pose":target}))
+        robots.addToQueue('Festo', new CRCLCommand('MoveTo', 'Move at Target'+i, {"Straight":false,"Pose":addHeight(target, 2)}))
         robots.addToQueue('Festo', new CRCLCommand('SetEndEffector',"Releasing Target"+i,{"Setting": 0.0}));
         robots.addToQueue('Festo', CommandFactory.SetTransSpeed('Set fast speed', fast))
         robots.addToQueue('Festo', new CRCLCommand('Wait','Wait 0.5s'+i,{"Time": 0.5}));
@@ -64,7 +64,7 @@ async function runAll(){
 
     robots.addToQueue('Conveyor', new CRCLCommand('MoveTo', 'Moving right', {"Straight":false,"Pose":{"X": 1, "Y": 0, "Z": 0, "A": 0, "B": 0, "C": 0}}))
 
-    for (let i of [3, 4, 5,   7, 8]){
+    for (let i of [3, 4, 5,  7, 8]){
         const origin = d["KukaOriginPart"+i]
         robots.addToQueue('Kuka', new CRCLCommand('MoveTo', 'Move high above Origin'+(i+8), {"Blending" : blending, "Straight":false,"Pose":setHeight(origin, kukaSafetyHeight)}))
         robots.addToQueue('Kuka', new CRCLCommand('MoveTo', 'Move little bit above Origin'+(i+8), {"Blending" : blending, "Straight":false,"Pose":addHeight(origin, approachdistance)}))
