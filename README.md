@@ -1,10 +1,11 @@
 # CRCLJS - NodeJS
 
-Specification and reference-implementation of the JSON-based PRIA-CRCLJS interface to control robots.
+NodeJS implementation of the queued streaming robot motion interface [CRCL-JS](https://github.com/PRIARobotics/CRCLJS), an adapted minimal JSON-based version of [CRCL](https://github.com/ros-industrial/crcl/blob/master/doc/Reference.md).
 
-Original XML-Reference: https://github.com/ros-industrial/crcl/blob/master/doc/Reference.md
+There are also two specific implementations:
 
-Our JSON-Reference: https://github.com/PRIArobotics/CRCLJS/blob/main/Reference.md
+- a general Javascript implementation with the reference: [CRCL-JS](https://github.com/PRIARobotics/CRCLJS)
+- a browser version with websockets: [CRCL-JS-WS](https://github.com/prIArobotics/CRCLJS-ws), which needs a socket-websocket-gateway, the [CRCLJS-WSAdapter](https://github.com/PRIARobotics/CRCLJS-WSAdapter).
 
 ## Getting Started
 
